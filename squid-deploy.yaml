@@ -1,0 +1,35 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: squid
+  name: squid
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: squid
+  template:
+    metadata:
+      labels:
+        app: squid
+    spec:
+      containers:
+      - image: ubuntu/squid:latest
+        imagePullPolicy: Always
+        name: squid
+        volumeMounts:
+        - mountPath: /etc/squid
+          name: config-volume
+      dnsConfig:
+        nameservers:
+          - 8.8.8.8
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: squid-config
+        name: config-volume
