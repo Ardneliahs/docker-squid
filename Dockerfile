@@ -105,7 +105,7 @@ RUN echo 'include /etc/squid/conf.d.tail/*.conf' >> /etc/squid/squid.conf
 FROM alpine:latest
 	
 ENV SQUID_CONFIG_FILE /etc/squid/squid.conf
-ENV TZ Europe/Moscow
+ENV TZ America/Los_Angeles
 
 RUN set -x && \
 	deluser squid 2>/dev/null; delgroup squid 2>/dev/null; \
@@ -136,7 +136,6 @@ RUN install -d -m 755 -o squid -g squid \
 		/etc/squid/conf.d \
 		/etc/squid/conf.d.tail
 RUN touch /etc/squid/conf.d/placeholder.conf 
-COPY squid-log.conf /etc/squid/conf.d.tail/
 
 RUN	set -x && \
 	apk add --no-cache --virtual .tz alpine-conf tzdata && \ 
