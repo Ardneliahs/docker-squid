@@ -26,6 +26,8 @@ spec:
         - mountPath: /etc/squid/squid.conf
           subPath: squid.conf
           name: config-volume
+        - mountPath: /var/cache/squid
+          name: cache-volume
       dnsConfig:
         nameservers:
           - 8.8.8.8
@@ -34,3 +36,7 @@ spec:
           defaultMode: 420
           name: squid-config
         name: config-volume
+      - name: cache-volume
+        hostPath:
+          path: C://cygwin64/home/shail/data
+          type: Directory
