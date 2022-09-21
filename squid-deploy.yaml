@@ -19,11 +19,12 @@ spec:
         app: squid
     spec:
       containers:
-      - image: ubuntu/squid:latest
+      - image: cliffbooth/shaigaut-squid:latest
         imagePullPolicy: Always
         name: squid
         volumeMounts:
-        - mountPath: /etc/squid
+        - mountPath: /etc/squid/squid.conf
+          subPath: squid.conf
           name: config-volume
       dnsConfig:
         nameservers:
