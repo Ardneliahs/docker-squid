@@ -64,7 +64,6 @@ RUN set -x && \
 		--enable-delay-pools \
 		--enable-openssl \
 		--enable-ssl-crtd \
-		--enable-security-cert-generators="file" \
 		--enable-ident-lookups \
 		--enable-cache-digests \
 		--enable-referer-log \
