@@ -47,13 +47,12 @@ RUN set -x && \
 		--libexecdir=/usr/lib/squid \
 		--localstatedir=/var \
 		--with-logdir=/var/log/squid \
-		--disable-strict-error-checking \
 		--enable-removal-policies="lru,heap" \
 		--enable-auth-digest \
-		--enable-auth-basic="getpwnam,NCSA,DB" \
+		--enable-auth-basic="getpwnam,NCSA,DB,fake,LDAP,PAM,POP3,RADIUS,SASL,SMB,SMB_LM" \
 		--enable-epoll \
-		--enable-external-acl-helpers="file_userip,unix_group,wbinfo_group" \
-		--enable-auth-ntlm="fake" \
+		--enable-external-acl-helpers="file_userip,unix_group,wbinfo_group,LDAP_group,time_quota,session,kerberos_ldap_group" \
+		--enable-auth-ntlm="SMB_LM,fake" \
 		--enable-auth-negotiate="kerberos,wrapper" \
 		--enable-silent-rules \
 		--enable-delay-pools \
