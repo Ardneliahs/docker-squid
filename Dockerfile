@@ -38,11 +38,6 @@ RUN set -x && \
 RUN set -x && \
 	cd /tmp/build && \	
 	tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
-	\
-	CFLAGS="-g0 -O2" \
-	CXXFLAGS="-g0 -O2" \
-	LDFLAGS="-s" \
-	\
 	./configure \
 		--build="$(uname -m)" \
 		--host="$(uname -m)" \
@@ -79,13 +74,9 @@ RUN set -x && \
 
 RUN set -x && \
 	cd /tmp/build && \
-	nproc=$(n=$(nproc) ; max_n=6 ; [ $n -le $max_n ] && echo $n || echo $max_n) && \
-	make -j $nproc && \
+	make && \
 	make install && \
 	cd tools/squidclient && make && make install-strip
-
-RUN sed -i '1s;^;include /etc/squid/conf.d/*.conf\n;' /etc/squid/squid.conf
-RUN echo 'include /etc/squid/conf.d.tail/*.conf' >> /etc/squid/squid.conf
 
 FROM alpine:latest
 	
@@ -132,4 +123,4 @@ EXPOSE 3128/tcp
 
 USER squid
 
-CMD ["sh", "-c", "/usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -z && exec /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -YCd 1"]
+CMD ["sh", "-c", "/usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -z && exec /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -d 10"]
