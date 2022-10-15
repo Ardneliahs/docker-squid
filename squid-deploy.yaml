@@ -39,5 +39,5 @@ spec:
         name: config-volume
       - name: cache-volume
         hostPath:
-          path: C://cygwin64/home/shail/data
+          path: /var/tmp/squid
           type: Directory
