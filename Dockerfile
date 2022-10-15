@@ -34,10 +34,10 @@ RUN set -x && \
 	gpg --import /tmp/squid-keys.asc && \
 	gpg --batch --verify squid-${SQUID_VER}.tar.gz.asc squid-${SQUID_VER}.tar.gz && \
 	rm -rf "$GNUPGHOME"
-	
+
 RUN set -x && \
-	cd /tmp/build && \	
-	tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
+       cd /tmp/build && \	
+			 tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
         \
         CFLAGS="-g0 -O2" \
         CXXFLAGS="-g0 -O2" \
@@ -83,7 +83,7 @@ RUN set -x && \
 	cd tools/squidclient && make && make install-strip
 
 FROM alpine:latest
-	
+
 ENV SQUID_CONFIG_FILE /etc/squid/squid.conf
 ENV TZ America/Los_Angeles
 
@@ -97,7 +97,7 @@ RUN apk add --no-cache \
 		libcap \
 		libressl3.5-libcrypto \
 		libressl3.5-libssl \
-		libltdl	
+		libltdl
 
 COPY --from=build /etc/squid/ /etc/squid/
 COPY --from=build /usr/lib/squid/ /usr/lib/squid/
@@ -105,24 +105,24 @@ COPY --from=build /usr/share/squid/ /usr/share/squid/
 COPY --from=build /usr/sbin/squid /usr/sbin/squid
 COPY --from=build /usr/bin/squidclient /usr/bin/squidclient
 
-		
+
 RUN install -d -o squid -g squid \
 		/var/cache/squid \
 		/var/log/squid \
 		/var/run/squid && \
 	chmod +x /usr/lib/squid/*
-	
+
 RUN install -d -m 755 -o squid -g squid \
 		/etc/squid/conf.d \
 		/etc/squid/conf.d.tail
-RUN touch /etc/squid/conf.d/placeholder.conf 
+RUN touch /etc/squid/conf.d/placeholder.conf
 
 RUN	set -x && \
-	apk add --no-cache --virtual .tz alpine-conf tzdata && \ 
+	apk add --no-cache --virtual .tz alpine-conf tzdata && \
 	/sbin/setup-timezone -z $TZ && \
-	apk del .tz 	
-	
-VOLUME ["/var/cache/squid"]	
+	apk del .tz
+
+VOLUME ["/var/cache/squid"]
 EXPOSE 3128/tcp
 
 USER squid
