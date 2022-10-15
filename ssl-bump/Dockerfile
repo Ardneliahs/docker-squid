@@ -36,8 +36,8 @@ RUN set -x && \
 	rm -rf "$GNUPGHOME"
 	
 RUN set -x && \
-	cd /tmp/build && \	
-	tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
+        cd /tmp/build && \
+        tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
         \
         CFLAGS="-g0 -O2" \
         CXXFLAGS="-g0 -O2" \
@@ -75,7 +75,6 @@ RUN set -x && \
                 --with-default-user=squid \
                 --with-pidfile=/var/run/squid/squid.pid
 
-
 RUN set -x && \
 	cd /tmp/build && \
 	make && \
@@ -109,6 +108,7 @@ COPY --from=build /usr/bin/squidclient /usr/bin/squidclient
 RUN install -d -o squid -g squid \
 		/var/cache/squid \
 		/var/log/squid \
+		/etc/squid/ssl_certs \
 		/var/run/squid && \
 	chmod +x /usr/lib/squid/*
 	
@@ -116,6 +116,7 @@ RUN install -d -m 755 -o squid -g squid \
 		/etc/squid/conf.d \
 		/etc/squid/conf.d.tail
 RUN touch /etc/squid/conf.d/placeholder.conf 
+
 
 RUN	set -x && \
 	apk add --no-cache --virtual .tz alpine-conf tzdata && \ 
@@ -127,4 +128,4 @@ EXPOSE 3128/tcp
 
 USER squid
 
-CMD ["sh", "-c", "/usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -z && exec /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -d 10"]
+CMD ["sh", "-c", "(test -d /var/cache/squid/ssl_db || /usr/lib/squid/security_file_certgen -c -s /var/cache/squid/ssl_db -M 20MB) && /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -z && exec /usr/sbin/squid -f ${SQUID_CONFIG_FILE} --foreground -d 10"]
