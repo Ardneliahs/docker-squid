@@ -35,45 +35,46 @@ RUN set -x && \
 	gpg --batch --verify squid-${SQUID_VER}.tar.gz.asc squid-${SQUID_VER}.tar.gz && \
 	rm -rf "$GNUPGHOME"
 
-RUN set -x && \
-       cd /tmp/build && \	
-			 tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
-        \
-        CFLAGS="-g0 -O2" \
-        CXXFLAGS="-g0 -O2" \
-        LDFLAGS="-s" \
-        \
-        ./configure \
-                --build="$(uname -m)" \
-                --host="$(uname -m)" \
-                --prefix=/usr \
-                --datadir=/usr/share/squid \
-                --sysconfdir=/etc/squid \
-                --libexecdir=/usr/lib/squid \
-                --localstatedir=/var \
-                --with-logdir=/var/log/squid \
-                --disable-strict-error-checking \
-                --disable-arch-native \
-                --enable-removal-policies="lru,heap" \
-                --enable-auth-digest \
-                --enable-auth-basic="getpwnam,NCSA,DB" \
-                --enable-external-acl-helpers="file_userip,unix_group,wbinfo_group" \
-                --enable-auth-ntlm="fake" \
-                --enable-auth-negotiate="kerberos,wrapper" \
-                --enable-silent-rules \
-                --enable-delay-pools \
-                --enable-ssl-crtd \
-                --enable-security-cert-generators="file" \
-                --enable-cache-digests \
-                --enable-follow-x-forwarded-for \
-                --enable-storeio="aufs,diskd,ufs,rock" \
-                --enable-translation \
-                --disable-snmp \
-                --with-openssl \
-                --disable-dependency-tracking \
-                --with-large-files \
-                --with-default-user=squid \
-                --with-pidfile=/var/run/squid/squid.pid
+	RUN set -x && \
+	        cd /tmp/build && \
+	        tar --strip 1 -xzf squid-${SQUID_VER}.tar.gz && \
+	        \
+	        CFLAGS="-g0 -O2" \
+	        CXXFLAGS="-g0 -O2" \
+	        LDFLAGS="-s" \
+	        \
+	        ./configure \
+	                --build="$(uname -m)" \
+	                --host="$(uname -m)" \
+	                --prefix=/usr \
+	                --datadir=/usr/share/squid \
+	                --sysconfdir=/etc/squid \
+	                --libexecdir=/usr/lib/squid \
+	                --localstatedir=/var \
+	                --with-logdir=/var/log/squid \
+	                --disable-strict-error-checking \
+	                --disable-arch-native \
+	                --enable-removal-policies="lru,heap" \
+	                --enable-auth-digest \
+	                --enable-auth-basic="getpwnam,NCSA,DB" \
+	                --enable-external-acl-helpers="file_userip,unix_group,wbinfo_group" \
+	                --enable-auth-ntlm="fake" \
+	                --enable-auth-negotiate="kerberos,wrapper" \
+	                --enable-silent-rules \
+	                --enable-delay-pools \
+	                --enable-ssl-crtd \
+	                --enable-security-cert-generators="file" \
+	                --enable-cache-digests \
+	                --enable-follow-x-forwarded-for \
+	                --enable-storeio="aufs,diskd,ufs,rock" \
+	                --enable-translation \
+	                --disable-snmp \
+	                --with-openssl \
+	                --disable-dependency-tracking \
+	                --with-large-files \
+	                --with-default-user=squid \
+	                --with-pidfile=/var/run/squid/squid.pid
+
 
 
 RUN set -x && \
