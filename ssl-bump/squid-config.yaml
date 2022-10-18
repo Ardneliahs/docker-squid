@@ -84,6 +84,10 @@ data:
     # Leave coredumps in the first cache dir
     coredump_dir /var/cache/squid
 
+    logformat squid-custom %>a http/%>st %un %tl %Ss %rm %ru http/%>Hs http/%<st "%{Referer}>h" "%{User-Agent}>h" | %<A | %tr | http/%<pt
+
+    access_log /var/log/squid/access.log logformat=squid-custom
+
     #
     # Add any of your own refresh_pattern entries above these.
     #
