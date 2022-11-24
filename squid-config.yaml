@@ -70,6 +70,7 @@ data:
     # Uncomment and adjust the following to add a disk cache directory.
     cache_dir ufs /var/cache/squid 100 16 256
     cache_mem 16 KB
+    maximum_object_size_in_memory 40 MB
     maximum_object_size 40 MB
 
     # Leave coredumps in the first cache dir

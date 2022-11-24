@@ -1,4 +1,4 @@
-FROM almalinux:latest
+FROM almalinux:latest as build
 
 ENV SQUID_VER 5.7
 
@@ -75,11 +75,19 @@ RUN set -x && \
 	cd tools/squidclient && make && make install-strip
 
 
+
+FROM almalinux:latest
 ENV SQUID_CONFIG_FILE /etc/squid/squid.conf
 
 RUN set -x && \
 	groupadd -r -g 3128 squid; \
 	useradd -r -u 3128 -G squid -g squid -M -s /bin/false -d /var/cache/squid squid
+
+COPY --from=build /etc/squid/ /etc/squid/
+COPY --from=build /usr/lib/squid/ /usr/lib/squid/
+COPY --from=build /usr/share/squid/ /usr/share/squid/
+COPY --from=build /usr/sbin/squid /usr/sbin/squid
+COPY --from=build /usr/bin/squidclient /usr/bin/squidclient
 
 
 RUN install -d -o squid -g squid \
